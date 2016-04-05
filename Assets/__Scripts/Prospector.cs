@@ -17,7 +17,7 @@ public class Prospector : MonoBehaviour {
     public static int SCORE_FROM_PREV_ROUND = 0;
     public static int HIGH_SCORE = 0;
 
-    public float reloadDelay = 1f;
+    public float reloadDelay = 0.5f;
 
     public Vector3 fsPosMid = new Vector3(0.5f, 0.90f, 0);
     public Vector3 fsPosRun = new Vector3(0.5f, 0.75f, 0);
@@ -311,6 +311,23 @@ public class Prospector : MonoBehaviour {
 
         List<Vector3> fsPts;
         switch(sEvt) {
+            case ScoreEvent.DRAW:
+            case ScoreEvent.GAMEWIN:
+            case ScoreEvent.GAMELOSS:
+                chain = 0;
+                score = score + scoreRun;
+                scoreRun = 0;
+                if(fsRun != null) {
+                    fsPts = new List<Vector3>();
+                    fsPts.Add(fsPosRun);
+                    fsPts.Add(fsPosMid2);
+                    fsPts.Add(fsPosEnd);
+                    fsRun.reportFinishTo = Scoreboard.S.gameObject;
+                    fsRun.Init(fsPts, 0, 1);
+                    fsRun.fontSizes = new List<float>(new float[] { 28, 36, 4 });
+                    fsRun = null;
+                }
+                break;
             case ScoreEvent.MINE:
                 chain++;
                 scoreRun = scoreRun + chain;
@@ -330,23 +347,6 @@ public class Prospector : MonoBehaviour {
                     fsRun.reportFinishTo = null;
                 } else {
                     fs.reportFinishTo = fsRun.gameObject;
-                }
-                break;
-            case ScoreEvent.DRAW:
-            case ScoreEvent.GAMEWIN:
-            case ScoreEvent.GAMELOSS:
-                chain = 0;
-                score = score + scoreRun;
-                scoreRun = 0;
-                if(fsRun != null) {
-                    fsPts = new List<Vector3>();
-                    fsPts.Add(fsPosRun);
-                    fsPts.Add(fsPosMid2);
-                    fsPts.Add(fsPosEnd);
-                    fsRun.reportFinishTo = Scoreboard.S.gameObject;
-                    fsRun.Init(fsPts, 0, 1);
-                    fsRun.fontSizes = new List<float>(new float[] { 28, 36, 4 });
-                    fsRun = null;
                 }
                 break;
         }

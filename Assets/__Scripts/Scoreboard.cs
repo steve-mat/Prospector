@@ -36,7 +36,7 @@ public class Scoreboard : MonoBehaviour {
         S = this;
     }
 
-    public void FSCallBack(FloatingScore fs) {
+    public void FSCallback(FloatingScore fs) {
         score = score + fs.score;
     }
 
@@ -46,7 +46,7 @@ public class Scoreboard : MonoBehaviour {
         FloatingScore fs = go.GetComponent<FloatingScore>();
 
         fs.score = amt;
-        fs.reportFinishTo = gameObject;
+        fs.reportFinishTo = this.gameObject;
         fs.Init(pts);
 
         return fs;

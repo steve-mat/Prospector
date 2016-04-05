@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 
 public enum FSState {
-    IDLE,
-    PRE,
-    ACTIVE,
-    POST
+    idle,
+    pre,
+    active,
+    post
 }
 
 public class FloatingScore : MonoBehaviour {
 
-    public FSState state = FSState.IDLE;
-    [SerializeField] private int _score = 0;
+    public FSState state = FSState.idle;
+    [SerializeField]
+    private int _score = 0;
     public string scoreString;
 
     public int score {
@@ -48,7 +49,7 @@ public class FloatingScore : MonoBehaviour {
         timeStart = eTimeS;
         timeDuration = eTimeD;
 
-        state = FSState.PRE;
+        state = FSState.pre;
 
     }
 
@@ -58,7 +59,7 @@ public class FloatingScore : MonoBehaviour {
 
     void Update() {
 
-        if(state == FSState.IDLE) {
+        if(state == FSState.idle) {
             return;
         }
 
@@ -66,20 +67,20 @@ public class FloatingScore : MonoBehaviour {
         float uC = Easing.Ease(u, easingCurve);
 
         if(u < 0) {
-            state = FSState.PRE;
+            state = FSState.pre;
             transform.position = bezierPts[0];
         } else {
             if(u >= 1) {
                 uC = 1;
-                state = FSState.POST;
+                state = FSState.post;
                 if(reportFinishTo != null) {
                     reportFinishTo.SendMessage("FSCallback", this);
                     Destroy(this.gameObject);
                 } else {
-                    state = FSState.IDLE;
+                    state = FSState.idle;
                 }
             } else {
-                state = FSState.ACTIVE;
+                state = FSState.active;
             }
 
             Vector3 pos = Utils.Bezier(uC, bezierPts);

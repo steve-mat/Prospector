@@ -70,7 +70,7 @@ public class Card : MonoBehaviour {
     }
 
     public virtual void OnMouseUpAsButton() {
-        Debug.Log(name);
+        Debug.Log(name);    
     }
 
 }
